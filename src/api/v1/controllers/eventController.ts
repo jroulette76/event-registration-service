@@ -4,6 +4,22 @@ import * as eventService from "../services/eventService";
 import type { Event } from "../models/events";
 import type { Attendee } from "../models/attendee";
 
+export const getEvent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const event: Event[] = await eventService.getEvent();
+    res.status(HTTP_STATUS.OK).json({
+      message: "Event retrieved successfully",
+      data: event,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getAllEvents = async (
   req: Request,
   res: Response,
@@ -20,7 +36,7 @@ export const getAllEvents = async (
   }
 };
 
-export const createEvent = async (
+export const createNewEvent = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -41,7 +57,7 @@ export const createEvent = async (
 
       const EventData = { name, description };
 
-      const newEvent: Event = await eventService.createEvent(EventData);
+      const newEvent: Event = await eventService.createNewEvent(EventData);
       res.status(HTTP_STATUS.CREATED).json({
         message: "Event created successfully",
         data: newEvent,
@@ -52,7 +68,7 @@ export const createEvent = async (
   }
 };
 
-export const updateEvent = async (
+export const updateExistingEvent = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -66,7 +82,7 @@ export const updateEvent = async (
     // Create update data object with only the fields that can be updated
     const updateData = { name, description };
 
-    const updatedEvent: Event = await eventService.updateEvent(id, updateData);
+    const updatedEvent: Event = await eventService.updateExistingEvent(id, updateData);
     res.status(HTTP_STATUS.OK).json({
       message: "Event updated successfully",
       data: updatedEvent,
@@ -76,14 +92,14 @@ export const updateEvent = async (
   }
 };
 
-export const deleteEvent = async (
+export const deleteExistingEvent = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    await eventService.deleteEvent(id);
+    await eventService.deleteExistingEvent(id);
     res.status(HTTP_STATUS.OK).json({
       message: "Event deleted successfully",
     });
