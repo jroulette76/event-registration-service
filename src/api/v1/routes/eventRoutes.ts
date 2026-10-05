@@ -1,4 +1,5 @@
 import { Router } from "express";
+import express from "express";
 
 import {
     getEvents,
@@ -6,7 +7,7 @@ import {
     createNewEvent,
     updateExistingEvent,
     deleteExistingEvent,
-} from "./api/v1/controllers/eventController";
+} from "../controllers/eventController";
 
 const router : Router = express.Router();
 
